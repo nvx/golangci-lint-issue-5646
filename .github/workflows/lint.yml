@@ -26,6 +26,7 @@ jobs:
       with:
         version: 'v2.0.2'
         args: --config="${{ github.workspace }}/linter-config/golangci.yml" --issues-exit-code 0 --output.checkstyle.path="${{ github.workspace }}/checkstyle_report.xml"
+        skip-cache: true
 
     - name: transform linter output
       uses: MeilCli/common-lint-reporter/transformer/checkstyle@v1
