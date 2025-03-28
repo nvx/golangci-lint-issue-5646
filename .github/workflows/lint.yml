@@ -33,14 +33,6 @@ jobs:
         report_files: checkstyle_report.xml
         output_path: common_lint.json
 
-    - name: generate lint report
-      uses: MeilCli/common-lint-reporter@v1
-      with:
-        report_files: common_lint.json
-        report_name: golangci-lint
-        report_type: 'check_run'
-        report_to_same_check_run: 'true'
-
     - name: archive linter outputs
       uses: actions/upload-artifact@v4
       with:
@@ -49,3 +41,11 @@ jobs:
           checkstyle_report.xml
           common_lint.json
         if-no-files-found: error
+
+    - name: generate lint report
+      uses: MeilCli/common-lint-reporter@v1
+      with:
+        report_files: common_lint.json
+        report_name: golangci-lint
+        report_type: 'check_run'
+        report_to_same_check_run: 'true'
