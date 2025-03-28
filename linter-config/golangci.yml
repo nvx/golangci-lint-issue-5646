@@ -1,6 +1,6 @@
 version: "2"
 run:
-  relative-path-mode: cfg
+  relative-path-mode: gitroot
 
 linters:
   enable:
