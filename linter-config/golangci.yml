@@ -1,0 +1,15 @@
+version: "2"
+run:
+  relative-path-mode: cfg
+
+linters:
+  enable:
+    - gocritic
+  settings:
+    gocritic:
+      enabled-checks:
+        - ruleguard
+      settings:
+        ruleguard:
+          failOn: all
+          rules: ${base-path}/ruleguard/*.go

@@ -1,0 +1,51 @@
+name: Lint
+
+permissions:
+  contents: write
+  packages: write
+  id-token: write
+  pull-requests: read
+  checks: write
+  actions: read
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - uses: actions/setup-go@v5
+
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@v7
+      with:
+        version: 'v2.0.2'
+        args: --config="${{ github.workspace }}/linter-config/golangci.yml" --issues-exit-code 0 --output.checkstyle.path="${{ github.workspace }}/checkstyle_report.xml"
+
+    - name: transform linter output
+      uses: MeilCli/common-lint-reporter/transformer/checkstyle@v1
+      with:
+        report_files: checkstyle_report.xml
+        output_path: common_lint.json
+
+    - name: generate lint report
+      uses: MeilCli/common-lint-reporter@v1
+      with:
+        report_files: common_lint.json
+        report_name: golangci-lint
+        report_type: 'check_run'
+        report_to_same_check_run: 'true'
+
+    - name: archive linter outputs
+      uses: actions/upload-artifact@v4
+      with:
+        name: golangci-lint
+        path: |
+          checkstyle_report.xml
+          common_lint.json
+        if-no-files-found: error
